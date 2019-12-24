@@ -3,6 +3,7 @@
 namespace PhpBench\Bridge\Php\Sampler;
 
 use PhpBench\Bridge\Php\Result\HrTimeResult;
+use PhpBench\Bridge\Php\Result\MemoryResult;
 use PhpBench\Bridge\Php\Sampler\CallbackParams;
 use PhpBench\Library\Result\Results;
 use PhpBench\Library\Sampler\Sampler;
@@ -11,21 +12,21 @@ class CallbackSampler implements Sampler
 {
     public function __invoke(
         $callback,
-        $iterations,
-        $param = []
+        int $iterations,
+        array $param = []
     ): Results
     {
-        $start = hrtime();
-        $callback = $callback();
+        $start = hrtime(true);
 
         for ($i = 0; $i < $iterations; $i++) {
-            $callback($callback->parameters());
+            $callback(...$param);
         }
 
-        $end = hrtime();
+        $end = hrtime(true);
 
-        return Results::one([
-            new HrTimeResult($start, $end),
-        ]);
+        return Results::many(
+            new HrTimeResult($start, $end, $iterations),
+            new MemoryResult(memory_get_peak_usage()),
+        );
     }
 }

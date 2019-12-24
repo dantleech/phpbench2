@@ -43,6 +43,15 @@ class MethodToConsoleOptionsBrokerTest extends TestCase
         $this->assertFalse($definition->getOption('foo')->isValueRequired());
     }
 
+    public function testArrayOption()
+    {
+        $definition = $this->converter(TestSubject::class, 'arraySingleOption')->inputDefinition();
+        $this->assertInstanceOf(InputDefinition::class, $definition);
+        $this->assertCount(1, $definition->getOptions());
+        $this->assertEquals('foo', $definition->getOption('foo')->getName());
+        $this->assertTrue($definition->getOption('foo')->isArray());
+    }
+
     private function converter(string $className, string $method)
     {
         return new MethodToConsoleOptionsBroker($className, $method);
@@ -60,6 +69,10 @@ class TestSubject
     }
 
     public function scalarSingleOption(string $foo = 'foo')
+    {
+    }
+
+    public function arraySingleOption(array $foo = [])
     {
     }
 

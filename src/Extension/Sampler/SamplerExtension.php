@@ -2,7 +2,6 @@
 
 namespace PhpBench\Extension\Sampler;
 
-use PhpBench\Bridge\Console\MethodToConsoleOptionsBroker;
 use PhpBench\Bridge\Php\Sampler\CallbackSampler;
 use PhpBench\Extension\Sampler\Command\SampleCommand;
 use PhpBench\Library\Sampler\SamplerLocator;
@@ -30,8 +29,7 @@ class SamplerExtension implements Extension
     {
         $container->register(SampleCommand::class, function (Container $container) {
             return new SampleCommand(
-                $container->get(SamplerLocator::class),
-                $container->get(MethodToConsoleOptionsBroker::class)
+                $container->get(SamplerLocator::class)
             );
         }, [
             ConsoleExtension::TAG_COMMAND => [
@@ -48,10 +46,6 @@ class SamplerExtension implements Extension
             }
 
             return new LazySamplerLocator($container, ...$defintions);
-        });
-
-        $container->register(MethodToConsoleOptionsBroker::class, function (Container $container) {
-            return new MethodToConsoleOptionsBroker();
         });
 
         $container->register(CallbackSampler::class, function (Container $container) {

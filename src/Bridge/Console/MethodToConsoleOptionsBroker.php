@@ -26,8 +26,8 @@ final class MethodToConsoleOptionsBroker
         $this->method = $reflection->getMethod($methodName);
     }
 
-    public function inputDefinition(): InputDefinition {
-        
+    public function inputDefinition(): InputDefinition
+    {
         $definition = new InputDefinition();
 
         if (!$this->method) {
@@ -39,6 +39,11 @@ final class MethodToConsoleOptionsBroker
         }
 
         return $definition;
+    }
+
+    public function castOptions(array $options): array
+    {
+        return (new CastMapToReflectionParameterTypes())->__invoke($this->method, $options);
     }
 
     private function createArgument(ReflectionParameter $parameter)
@@ -57,7 +62,8 @@ final class MethodToConsoleOptionsBroker
 
         $type = $parameter->getType();
         $type = $type ? $type->getName() : null;
-        if ($parameter->isDefaultValueAvailable() && $type !== 'bool') {
+
+        if ($parameter->isDefaultValueAvailable() && !in_array($type, ['bool','array'])) {
             $option->setDefault($parameter->getDefaultValue());
         }
 
@@ -68,6 +74,11 @@ final class MethodToConsoleOptionsBroker
     {
         $type = $parameter->getType();
         $type = $type ? $type->getName() : null;
+
+        if ($type === 'array') {
+            return InputOption::VALUE_IS_ARRAY|InputOption::VALUE_REQUIRED;
+        }
+
         if ($type === 'bool') {
             return InputOption::VALUE_NONE;
         }

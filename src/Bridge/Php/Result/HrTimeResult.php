@@ -6,6 +6,8 @@ use PhpBench\Library\Result\Result;
 
 final class HrTimeResult implements Result
 {
+    const NAME = 'hrTime';
+
     /**
      * @var float
      */
@@ -16,10 +18,16 @@ final class HrTimeResult implements Result
      */
     private $end;
 
-    public function __construct(float $start, float $end)
+    /**
+     * @var int
+     */
+    private $iterations;
+
+    public function __construct(float $start, float $end, int $iterations)
     {
         $this->start = $start;
         $this->end = $end;
+        $this->iterations = $iterations;
     }
 
     public function end(): float
@@ -30,5 +38,23 @@ final class HrTimeResult implements Result
     public function start(): float
     {
         return $this->start;
+    }
+
+    public function toArray(): array
+    {
+        $duration = $this->end - $this->start;
+
+        return [
+            'start' => $this->start,
+            'end' => $this->end,
+            'duration' => $duration,
+            'iterations' => $this->iterations,
+            'mean' => $duration / $this->iterations,
+        ];
+    }
+
+    public function name(): string
+    {
+        return self::NAME;
     }
 }

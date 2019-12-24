@@ -22,16 +22,10 @@ class SampleCommand extends Command
      */
     private $locator;
 
-    /**
-     * @var MethodToDefinitionConverter
-     */
-    private $converter;
-
-    public function __construct(SamplerLocator $locator, MethodToConsoleOptionsBroker $converter)
+    public function __construct(SamplerLocator $locator)
     {
         parent::__construct();
         $this->locator = $locator;
-        $this->converter = $converter;
     }
 
     protected function configure()
@@ -53,13 +47,14 @@ class SampleCommand extends Command
             )
         ));
 
-        $definition = $this->converter->createInputDefinition(
-            get_class($sampler),
-            '__invoke'
-        );
+        $converter = new MethodToConsoleOptionsBroker(get_class($sampler), '__invoke');
 
-        $input->bind($definition);
+        $input->bind($converter->inputDefinition());
 
-        Invoke::method($sampler, '__invoke', array_filter($input->getOptions()));
+        $options = $converter->castOptions($input->getOptions());
+        $results = Invoke::method($sampler, '__invoke', array_filter($options));
+        $output->write(json_encode($results->toArray()), false, OutputInterface::OUTPUT_RAW);
+
+        return 0;
     }
 }
