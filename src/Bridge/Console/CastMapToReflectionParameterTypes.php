@@ -23,6 +23,9 @@ final class CastMapToReflectionParameterTypes
             if ($type->getName() === 'float') {
                 $options[$optionName] = (float) $options[$optionName];
             }
+            if ($type->getName() === 'bool') {
+                $options[$optionName] = (bool) $options[$optionName];
+            }
         }
         return $options;
     }

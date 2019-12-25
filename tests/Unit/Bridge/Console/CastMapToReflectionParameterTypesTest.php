@@ -17,6 +17,7 @@ class CastMapToReflectionParameterTypesTest extends TestCase
             'int' => '1234',
             'float' => '1.123',
             'array' => [ '1234 '],
+            'bool' => 0
         ];
 
         self::assertSame([
@@ -25,6 +26,7 @@ class CastMapToReflectionParameterTypesTest extends TestCase
             'int' => 1234,
             'float' => 1.123,
             'array' => [ '1234 '],
+            'bool' => false,
         ], (new CastMapToReflectionParameterTypes())->__invoke($reflectionMethod, $options));
 
     }
@@ -32,7 +34,7 @@ class CastMapToReflectionParameterTypesTest extends TestCase
 
 class TestClass
 {
-    public function test($unknown, string $string, int $int, array $array, float $float)
+    public function test($unknown, string $string, int $int, array $array, float $float, bool $bool)
     {
     }
 }
