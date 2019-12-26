@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpBench\Extension\Sampler;
+namespace PhpBench\Extension\Transform;
 
 use DTL\Invoke\Invoke;
 
-final class SamplerDefinition
+final class TransformerDefinition
 {
     /**
      * @var string

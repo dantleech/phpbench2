@@ -4,6 +4,7 @@ namespace PhpBench\Extension\Sampler\Command;
 
 use DTL\Invoke\Invoke;
 use PhpBench\Bridge\Console\MethodToConsoleOptionsBroker;
+use PhpBench\Library\Cast\Cast;
 use PhpBench\Library\Sampler\Sampler;
 use PhpBench\Library\Sampler\SamplerLocator;
 use Symfony\Component\Console\Command\Command;
@@ -30,7 +31,7 @@ class SampleCommand extends Command
         $this->locator = $locator;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->addArgument(self::ARG_SAMPLER, InputArgument::REQUIRED, 'Sampler alias');
         $this->addArgument(self::ARG_PARAMETERS, InputArgument::IS_ARRAY, 'Sampler parameters');
@@ -39,26 +40,29 @@ class SampleCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $alias = (string)$input->getArgument(self::ARG_SAMPLER);
+        $alias = Cast::toString($input->getArgument(self::ARG_SAMPLER));
         $sampler = $this->locator->get($alias);
 
         $options = $this->resolveSamplerOptions($input, $sampler);
 
         for ($i = 0; $i < $input->getOption(self::OPT_SAMPLES); $i++) {
             $results = Invoke::method($sampler, '__invoke', array_filter($options));
-            $output->write(json_encode($results->toArray()), true, OutputInterface::OUTPUT_RAW);
+            $output->write(json_encode($results->toArray(), JSON_THROW_ON_ERROR), true, OutputInterface::OUTPUT_RAW);
         }
 
         return 0;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function resolveSamplerOptions(InputInterface $input, Sampler $sampler): array
     {
         $input = new StringInput(implode(
             ' ',
             array_map(
                 'escapeshellarg',
-                $input->getArgument(self::ARG_PARAMETERS)
+                Cast::toArray($input->getArgument(self::ARG_PARAMETERS))
             )
         ));
 

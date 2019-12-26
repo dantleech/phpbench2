@@ -5,7 +5,7 @@ namespace PhpBench\Library\Result;
 final class Results
 {
     /**
-     * @var array
+     * @var array<Result>
      */
     private $results;
 
@@ -14,16 +14,19 @@ final class Results
         $this->results = $results;
     }
 
-    public static function many(...$results): self
+    public static function many(Result ...$results): self
     {
         return new self(...$results);
     }
 
-    public static function one(Result $result)
+    public static function one(Result $result): self
     {
         return new self($result);
     }
 
+    /**
+     * @return array<string,array>
+     */
     public function toArray(): array
     {
         $map = [];

@@ -10,6 +10,10 @@ use PhpBench\Library\Sampler\Sampler;
 
 class CallbackSampler implements Sampler
 {
+    /**
+     * @param callable $callback
+     * @param array<string,mixed> $param 
+     */
     public function __invoke(
         $callback,
         int $iterations,
