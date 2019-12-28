@@ -6,6 +6,7 @@ use PhpBench\Library\Sampler\Exception\SamplerNotFound;
 use PhpBench\Library\Sampler\Sampler;
 use PhpBench\Library\Sampler\SamplerLocator;
 use PhpBench\Library\Visualize\Exception\VisualizerNotFound;
+use PhpBench\Library\Visualize\Visualizer;
 use PhpBench\Library\Visualize\VisualizerLocator;
 use Psr\Container\ContainerInterface;
 use PhpBench\Extension\Visualize\VisualizerDefinition;
