@@ -3,6 +3,7 @@
 namespace PhpBench\Extension\Visualize;
 
 use PhpBench\Bridge\Php\Sampler\CallbackSampler;
+use PhpBench\Bridge\Php\Visualizer\AnsiBarChartVisualizer;
 use PhpBench\Extension\Sampler\Command\SampleCommand;
 use PhpBench\Extension\Visualize\Command\VisualizeCommand;
 use PhpBench\Library\Sampler\SamplerLocator;
@@ -33,7 +34,7 @@ class VisualizerExtension implements Extension
     {
         $container->register(VisualizeCommand::class, function (Container $container) {
             return new VisualizeCommand(
-                $container->get(SamplerLocator::class)
+                $container->get(VisualizerLocator::class)
             );
         }, [
             ConsoleExtension::TAG_COMMAND => [
@@ -51,5 +52,13 @@ class VisualizerExtension implements Extension
 
             return new LazyVisualizerLocator($container, ...$defintions);
         });
+
+        $container->register(AnsiBarChartVisualizer::class, function (Container $contianer) {
+            return new AnsiBarChartVisualizer();
+        }, [
+            self::TAG_VISUALIZER => [
+                'alias' => 'bar',
+            ],
+        ]);
     }
 }
