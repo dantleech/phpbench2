@@ -2,6 +2,7 @@
 
 namespace PhpBench\Extension\Transform;
 
+use PhpBench\Bridge\MathPhp\Transform\KernelDensityTransformer;
 use PhpBench\Extension\Transform\Command\TransformCommand;
 use PhpBench\Library\Transform\TransformLocator;
 use PhpBench\Library\Transform\TransformerLocator;
@@ -15,7 +16,7 @@ use PhpBench\Extension\Transform\TransformerDefinition;
 
 class TransformExtension implements Extension
 {
-    const TAG_TRANSFORMER = 'sampler';
+    const TAG_TRANSFORMER = 'transformer';
 
     /**
      * {@inheritDoc}
@@ -49,5 +50,13 @@ class TransformExtension implements Extension
 
             return new LazyTransformLocator($container, ...$defintions);
         });
+
+        $container->register(KernelDensityTransformer::class, function (Container $container) {
+            return new KernelDensityTransformer();
+        }, [
+            self::TAG_TRANSFORMER => [
+                'alias' => 'kde',
+            ],
+        ]);
     }
 }

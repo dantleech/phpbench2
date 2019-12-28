@@ -84,12 +84,12 @@ final class MethodToConsoleOptionsBroker
         return $option;
     }
 
-    private function buildOptionMode(ReflectionParameter $parameter): int
+    private function buildOptionMode(ReflectionParameter $parameter): ?int
     {
         $type = $parameter->getType();
 
         if (!$type instanceof ReflectionNamedType) {
-            return 0;
+            return InputOption::VALUE_OPTIONAL;
         }
 
         $type = $type->getName();

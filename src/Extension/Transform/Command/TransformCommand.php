@@ -43,8 +43,18 @@ class TransformCommand extends Command
 
         $options = $this->resolveTransformerOptions($input, $transformer);
 
+        $values = [];
         while ($data = fgets(STDIN)) {
-            $result = Invoke::method($transformer, '__invoke', array_filter($options));
+            $values[] = json_decode($data);
+
+            if (count($values) < 2) {
+                continue;
+            }
+
+            $result = Invoke::method($transformer, '__invoke', array_merge([
+                'data' => $values,
+            ], array_filter($options)));
+
             $output->write(json_encode($result, JSON_THROW_ON_ERROR), true, OutputInterface::OUTPUT_RAW);
         }
 
