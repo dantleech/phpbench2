@@ -9,7 +9,7 @@ final class KernelDensityTransformer implements Transformer
 {
     /**
      * @param array<float> $data
-     * @return array<float>
+     * @return array<float,float>
      */
     public function __invoke(
         array $data,
@@ -22,7 +22,7 @@ final class KernelDensityTransformer implements Transformer
         $estimate = new KernelDensityEstimation($data, $bandwidth, $function);
         $step = (max($data) - min($data)) / $points;
         for ($x = min($data); $x < max($data); $x += $step) {
-            $values[] = $estimate->evaluate($x);
+            $values[$x] = $estimate->evaluate($x);
         }
 
         return $values;

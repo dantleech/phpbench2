@@ -52,11 +52,7 @@ class VisualizeCommand extends Command
             fwrite($stream, sprintf("\x1B[%dA", $numberOfLinesToClear));
             fwrite($stream, "\x1B[0J");
 
-            $values = json_decode($data);
-
-            if (count($values) < 2) {
-                continue;
-            }
+            $values = (array)json_decode($data, true);
 
             $result = Invoke::method($visualizer, '__invoke', array_merge([
                 'values' => $values,

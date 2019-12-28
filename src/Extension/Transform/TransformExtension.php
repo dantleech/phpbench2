@@ -2,6 +2,7 @@
 
 namespace PhpBench\Extension\Transform;
 
+use PhpBench\Bridge\MathPhp\Transform\DescribeTransformer;
 use PhpBench\Bridge\MathPhp\Transform\KernelDensityTransformer;
 use PhpBench\Extension\Transform\Command\TransformCommand;
 use PhpBench\Library\Transform\TransformLocator;
@@ -56,6 +57,14 @@ class TransformExtension implements Extension
         }, [
             self::TAG_TRANSFORMER => [
                 'alias' => 'kde',
+            ],
+        ]);
+
+        $container->register(DescribeTransformer::class, function (Container $container) {
+            return new DescribeTransformer();
+        }, [
+            self::TAG_TRANSFORMER => [
+                'alias' => 'describe',
             ],
         ]);
     }

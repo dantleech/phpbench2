@@ -25,12 +25,14 @@ class AnsiBarChartVisualizer implements Visualizer
         $graph = [];
         $maxValue = max($values);
         $barWidth = $this->barWidth($maxValue, $maxValue, $maxWidth);
+        $labelWidth = $this->maxLabelWidth($values);
 
-        foreach ($values as $value) {
+        foreach ($values as $key => $value) {
             $graph[] = sprintf(
-                '%s %s',
+                '%-' . $labelWidth . 's |%s %s',
+                $key,
                 $this->pad($this->bar($value, $maxValue, $maxWidth), $barWidth),
-                $value
+                number_format($value, 6)
             );
         }
 
@@ -44,6 +46,20 @@ class AnsiBarChartVisualizer implements Visualizer
         }
 
         return (int)ceil(($current / $max) * $maxWidth);
+    }
+
+    private function maxLabelWidth(array $values): int
+    {
+        $max = 0;
+
+        foreach (array_keys($values) as $value) {
+            $length = mb_strlen((string)$value);
+            if ($length > $max) {
+                $max = $length;
+            }
+        }
+
+        return $max + self::PADDING;
     }
 
     private function bar(float $value, float $maxValue, int $maxWidth): string
