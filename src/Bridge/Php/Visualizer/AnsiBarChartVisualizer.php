@@ -48,6 +48,9 @@ class AnsiBarChartVisualizer implements Visualizer
         return (int)ceil(($current / $max) * $maxWidth);
     }
 
+    /**
+     * @param array<string,float|int> $values
+     */
     private function maxLabelWidth(array $values): int
     {
         $max = 0;

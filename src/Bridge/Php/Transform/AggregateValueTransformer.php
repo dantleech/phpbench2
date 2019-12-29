@@ -7,7 +7,12 @@ use RuntimeException;
 
 class AggregateValueTransformer implements Transformer
 {
-    public function __invoke(array $data, array $groupBy = [], string $valuePath)
+    /**
+     * @param array<mixed,mixed> $data
+     * @param array<string> $groupBy
+     * @return array<string,float>
+     */
+    public function __invoke(array $data, array $groupBy = [], string $valuePath): array
     {
         $aggregated = [];
         foreach ($data as $key => $row) {
@@ -35,7 +40,9 @@ class AggregateValueTransformer implements Transformer
 
         $valuePath = explode('.', $valuePath);
 
-        $data = array_map(function ($groupedData) use ($valuePath) {
+        return array_map(function (array $values) {
+            return array_sum($values) / count($values);
+        }, array_map(function ($groupedData) use ($valuePath) {
             return array_map(function ($data) use ($valuePath) {
                 foreach ($valuePath as $key) {
                     if (!isset($data[$key])) {
@@ -48,11 +55,6 @@ class AggregateValueTransformer implements Transformer
                 }
                 return $data;
             }, $groupedData);
-        }, $aggregated);
-
-
-        return array_map(function (array $values) {
-            return array_sum($values) / count($values);
-        }, $data);
+        }, $aggregated));
     }
 }
