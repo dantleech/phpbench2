@@ -18,6 +18,7 @@ class SampleCommand extends Command
 {
     const ARG_SAMPLER = 'sampler';
     const ARG_PARAMETERS = 'parameters';
+    const OPT_LABEL = 'label';
     const OPT_SAMPLES = 'samples';
 
     /**
@@ -35,11 +36,14 @@ class SampleCommand extends Command
     {
         $this->addArgument(self::ARG_SAMPLER, InputArgument::REQUIRED, 'Sampler alias');
         $this->addArgument(self::ARG_PARAMETERS, InputArgument::IS_ARRAY, 'Sampler parameters');
+        $this->addOption(self::OPT_LABEL, 'l', InputOption::VALUE_REQUIRED, 'Label for samples');
         $this->addOption(self::OPT_SAMPLES, 's', InputOption::VALUE_REQUIRED, 'Number of samples to take', 1);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $label = Cast::toStringOrNull($input->getOption(self::OPT_LABEL));
+        $label = $label ?: uniqid();
         $alias = Cast::toString($input->getArgument(self::ARG_SAMPLER));
         $sampler = $this->locator->get($alias);
 
@@ -53,11 +57,14 @@ class SampleCommand extends Command
             // pass-through any data from prior processes
             $read = [$stdin];
             if (stream_select($read, $write, $except, 0)) {
-                fwrite($stdout, fgets($stdin));
+                $line = fgets($stdin);
+                fwrite($stdout, $line);
             }
 
             $results = Invoke::method($sampler, '__invoke', array_filter($options));
-            fwrite($stdout, json_encode($results->toArray(), JSON_THROW_ON_ERROR)."\n");
+            fwrite($stdout, json_encode(array_merge([
+                'label' => $label,
+            ], $results->toArray()), JSON_THROW_ON_ERROR)."\n");
         }
 
         // pass-through any remaining data from prior processes

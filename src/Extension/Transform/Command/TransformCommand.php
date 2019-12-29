@@ -45,7 +45,7 @@ class TransformCommand extends Command
 
         $values = [];
         while ($data = fgets(STDIN)) {
-            $values[] = json_decode($data);
+            $values[] = json_decode($data, true);
 
             if (count($values) < 2) {
                 continue;

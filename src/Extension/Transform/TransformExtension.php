@@ -4,6 +4,7 @@ namespace PhpBench\Extension\Transform;
 
 use PhpBench\Bridge\MathPhp\Transform\DescribeTransformer;
 use PhpBench\Bridge\MathPhp\Transform\KernelDensityTransformer;
+use PhpBench\Bridge\Php\Transform\AggregateValueTransformer;
 use PhpBench\Extension\Transform\Command\TransformCommand;
 use PhpBench\Library\Transform\TransformLocator;
 use PhpBench\Library\Transform\TransformerLocator;
@@ -65,6 +66,14 @@ class TransformExtension implements Extension
         }, [
             self::TAG_TRANSFORMER => [
                 'alias' => 'describe',
+            ],
+        ]);
+
+        $container->register(AggregateValueTransformer::class, function (Container $container) {
+            return new AggregateValueTransformer();
+        }, [
+            self::TAG_TRANSFORMER => [
+                'alias' => 'aggregate_value',
             ],
         ]);
     }
