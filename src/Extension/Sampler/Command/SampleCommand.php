@@ -44,11 +44,32 @@ class SampleCommand extends Command
         $sampler = $this->locator->get($alias);
 
         $options = $this->resolveSamplerOptions($input, $sampler);
+        $stdin = fopen('php://stdin', 'r');
+        $stdout = fopen('php://stdout', 'r');
+        $write = $except = [];
 
         for ($i = 0; $i < $input->getOption(self::OPT_SAMPLES); $i++) {
+
+            // pass-through any data from prior processes
+            $read = [$stdin];
+            if (stream_select($read, $write, $except, 0)) {
+                fwrite($stdout, fgets($stdin));
+            }
+
             $results = Invoke::method($sampler, '__invoke', array_filter($options));
-            $output->write(json_encode($results->toArray(), JSON_THROW_ON_ERROR), true, OutputInterface::OUTPUT_RAW);
+            fwrite($stdout, json_encode($results->toArray(), JSON_THROW_ON_ERROR)."\n");
         }
+
+        // pass-through any remaining data from prior processes
+        $read = [$stdin];
+        if (stream_select($read, $write, $except, 1)) {
+            while ($line = fgets($stdin)) {
+                fwrite($stdout, $line);
+            }
+        }
+
+        fclose($stdin);
+        fclose($stdout);
 
         return 0;
     }
