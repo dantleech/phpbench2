@@ -16,26 +16,19 @@ class IntegrationTestCase extends TestCase
 
     public static function assertProcessSuccess(Process $process): void
     {
-        if ($process->getExitCode() === 0) {
-            return;
-        }
-
-        self::fail(sprintf(
+        self::assertEquals(0, $process->getExitCode(), sprintf(
             'Failed asserting process success, it returned "%s": ERR: %s',
             $process->getExitCode(),
             $process->getErrorOutput()
         ));
     }
 
-    public static function assertProcessFailure(Process $process): void
+    public static function assertProcessFailure(Process $process, string $expectedErrText): void
     {
-        if ($process->getExitCode() !== 0) {
-            return;
-        }
-
-        self::fail(sprintf(
+        self::assertNotEquals(0, $process->getExitCode(), sprintf(
             'Failed asserting process failed, it returned "%s"',
             $process->getExitCode()
         ));
+        self::assertStringContainsString($expectedErrText, $process->getErrorOutput());
     }
 }

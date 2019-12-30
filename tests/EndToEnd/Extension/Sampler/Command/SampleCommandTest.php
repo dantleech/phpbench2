@@ -39,4 +39,10 @@ class SampleCommandTest extends IntegrationTestCase
             ],
         ], $samples);
     }
+
+    public function testFailsOnUnknownSampler()
+    {
+        $process = self::exec('sample notexisting --samples=2 --label=one -- --value=100');
+        self::assertProcessFailure($process, 'Sampler with alias "notexisting" not found');
+    }
 }
