@@ -4,6 +4,7 @@ namespace PhpBench\Extension\Visualize\Command;
 
 use DTL\Invoke\Invoke;
 use PhpBench\Bridge\Console\MethodToConsoleOptionsBroker;
+use PhpBench\Bridge\Console\CliParametersToInvokableParameters;
 use PhpBench\Library\Cast\Cast;
 use PhpBench\Library\Visualize\Visualizer;
 use PhpBench\Library\Visualize\VisualizerLocator;
@@ -18,7 +19,6 @@ class VisualizeCommand extends Command
 {
     const ARG_VISUALIZER = 'visualizer';
     const ARG_PARAMETERS = 'parameters';
-    const OPT_SAMPLES = 'samples';
 
     /**
      * @var VisualizerLocator
@@ -35,24 +35,26 @@ class VisualizeCommand extends Command
     {
         $this->addArgument(self::ARG_VISUALIZER, InputArgument::REQUIRED, 'Visualizer alias');
         $this->addArgument(self::ARG_PARAMETERS, InputArgument::IS_ARRAY, 'Visualizer parameters');
-        $this->addOption(self::OPT_SAMPLES, 's', InputOption::VALUE_REQUIRED, 'Number of samples to take', 1);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $alias = Cast::toString($input->getArgument(self::ARG_VISUALIZER));
-        $visualizer = $this->locator->get($alias);
 
-        $options = $this->resolveVisualizerOptions($input, $visualizer);
+        $visualizer = $this->locator->get($alias);
+        $options = CliParametersToInvokableParameters::convert(
+            $visualizer,
+            Cast::toArray($input->getArgument(self::ARG_PARAMETERS))
+        );
 
         $values = [];
-        $numberOfLinesToClear = 0;
+        $numberOfLinesToClear = -1;
         $stream = fopen('php://stdout', 'w');
         while ($data = fgets(STDIN)) {
+            $values = (array)json_decode($data, true);
+
             fwrite($stream, sprintf("\x1B[%dA", $numberOfLinesToClear));
             fwrite($stream, "\x1B[0J");
-
-            $values = (array)json_decode($data, true);
 
             $result = Invoke::method($visualizer, '__invoke', array_merge([
                 'values' => $values,
@@ -63,25 +65,5 @@ class VisualizeCommand extends Command
         }
 
         return 0;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function resolveVisualizerOptions(InputInterface $input, Visualizer $visualizer): array
-    {
-        $input = new StringInput(implode(
-            ' ',
-            array_map(
-                'escapeshellarg',
-                Cast::toArray($input->getArgument(self::ARG_PARAMETERS))
-            )
-        ));
-
-        $converter = new MethodToConsoleOptionsBroker(get_class($visualizer), '__invoke');
-
-        $input->bind($converter->inputDefinition());
-        $options = $converter->castOptions($input->getOptions());
-        return $options;
     }
 }

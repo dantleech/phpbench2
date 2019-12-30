@@ -52,7 +52,11 @@ class SampleCommand extends Command
         $stdout = fopen('php://stdout', 'r');
         $write = $except = [];
 
-        for ($i = 0; $i < $input->getOption(self::OPT_SAMPLES); $i++) {
+        $samples = (int)$input->getOption(self::OPT_SAMPLES);
+        if (0 >= $samples) {
+            $samples = PHP_INT_MAX;
+        }
+        for ($i = 0; $i < $samples; $i++) {
 
             // pass-through any data from prior processes
             $read = [$stdin];
