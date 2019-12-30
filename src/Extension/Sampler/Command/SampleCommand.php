@@ -3,6 +3,7 @@
 namespace PhpBench\Extension\Sampler\Command;
 
 use DTL\Invoke\Invoke;
+use PhpBench\Bridge\Console\CliParametersToInvokableParameters;
 use PhpBench\Bridge\Console\MethodToConsoleOptionsBroker;
 use PhpBench\Library\Cast\Cast;
 use PhpBench\Library\Sampler\Sampler;
@@ -47,7 +48,11 @@ class SampleCommand extends Command
         $alias = Cast::toString($input->getArgument(self::ARG_SAMPLER));
         $sampler = $this->locator->get($alias);
 
-        $options = $this->resolveSamplerOptions($input, $sampler);
+        $options = CliParametersToInvokableParameters::convert(
+            $sampler,
+            Cast::toArray($input->getArgument(self::ARG_PARAMETERS))
+        );
+
         $stdin = fopen('php://stdin', 'r');
         $stdout = fopen('php://stdout', 'r');
         $write = $except = [];
@@ -83,25 +88,5 @@ class SampleCommand extends Command
         fclose($stdout);
 
         return 0;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function resolveSamplerOptions(InputInterface $input, Sampler $sampler): array
-    {
-        $input = new StringInput(implode(
-            ' ',
-            array_map(
-                'escapeshellarg',
-                Cast::toArray($input->getArgument(self::ARG_PARAMETERS))
-            )
-        ));
-
-        $converter = new MethodToConsoleOptionsBroker(get_class($sampler), '__invoke');
-
-        $input->bind($converter->inputDefinition());
-        $options = $converter->castOptions($input->getOptions());
-        return $options;
     }
 }

@@ -3,6 +3,7 @@
 namespace PhpBench\Extension\Transform\Command;
 
 use DTL\Invoke\Invoke;
+use PhpBench\Bridge\Console\CliParametersToInvokableParameters;
 use PhpBench\Bridge\Console\MethodToConsoleOptionsBroker;
 use PhpBench\Library\Cast\Cast;
 use PhpBench\Library\Transform\Transformer;
@@ -41,7 +42,10 @@ class TransformCommand extends Command
         $alias = Cast::toString($input->getArgument(self::ARG_TRANSFORMER));
         $transformer = $this->locator->get($alias);
 
-        $options = $this->resolveTransformerOptions($input, $transformer);
+        $options = CliParametersToInvokableParameters::convert(
+            $transformer,
+            Cast::toArray($input->getArgument(self::ARG_PARAMETERS))
+        );
 
         $values = [];
         while ($data = fgets(STDIN)) {
@@ -59,25 +63,5 @@ class TransformCommand extends Command
         }
 
         return 0;
-    }
-
-    /**
-     * @return array<string,mixed>
-     */
-    private function resolveTransformerOptions(InputInterface $input, Transformer $transformer): array
-    {
-        $input = new StringInput(implode(
-            ' ',
-            array_map(
-                'escapeshellarg',
-                Cast::toArray($input->getArgument(self::ARG_PARAMETERS))
-            )
-        ));
-
-        $converter = new MethodToConsoleOptionsBroker(get_class($transformer), '__invoke');
-
-        $input->bind($converter->inputDefinition());
-        $options = $converter->castOptions($input->getOptions());
-        return $options;
     }
 }
