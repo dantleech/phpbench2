@@ -21,7 +21,7 @@ class MemoryResult implements Result
         return $this->peakUsage;
     }
 
-    public function toArray(): array
+    public function value(): array
     {
         return [
             'peak' => $this->peakUsage,
@@ -30,6 +30,6 @@ class MemoryResult implements Result
 
     public function name(): string
     {
-        return 'phpMemory';
+        return 'phpmemory';
     }
 }

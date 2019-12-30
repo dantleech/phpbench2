@@ -31,7 +31,7 @@ final class Results
     {
         $map = [];
         foreach ($this->results as $result) {
-            $map[$result->name()] = $result->toArray();
+            $map[$result->name()] = $result->value();
         }
         return $map;
     }

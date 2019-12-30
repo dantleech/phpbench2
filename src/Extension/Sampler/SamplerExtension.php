@@ -5,6 +5,7 @@ namespace PhpBench\Extension\Sampler;
 use PhpBench\Bridge\Php\Sampler\CallbackSampler;
 use PhpBench\Extension\Sampler\Command\SampleCommand;
 use PhpBench\Library\Sampler\SamplerLocator;
+use PhpBench\Library\Sampler\Sampler\ConstantSampler;
 use Phpactor\Container\Container;
 use Phpactor\Container\ContainerBuilder;
 use Phpactor\Container\Extension;
@@ -53,6 +54,14 @@ class SamplerExtension implements Extension
         }, [
             self::TAG_SAMPLER => [
                 'alias' => 'callback',
+            ],
+        ]);
+
+        $container->register(CallbackSampler::class, function (Container $container) {
+            return new ConstantSampler();
+        }, [
+            self::TAG_SAMPLER => [
+                'alias' => 'constant',
             ],
         ]);
     }

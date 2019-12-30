@@ -5,9 +5,9 @@ namespace PhpBench\Library\Result;
 interface Result
 {
     /**
-     * @return array<mixed>
+     * @return string|float|int|bool|array<mixed>
      */
-    public function toArray(): array;
+    public function value();
 
     public function name(): string;
 }

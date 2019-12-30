@@ -40,7 +40,7 @@ final class HrTimeResult implements Result
         return $this->start;
     }
 
-    public function toArray(): array
+    public function value(): array
     {
         $duration = $this->end - $this->start;
 
