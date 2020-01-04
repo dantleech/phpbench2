@@ -17,8 +17,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class TransformCommand extends Command
 {
-    const ARG_TRANSFORMER = 'transformer';
-    const ARG_PARAMETERS = 'parameters';
+    private const ARG_TRANSFORMER = 'transformer';
+    private const ARG_PARAMETERS = 'parameters';
 
     /**
      * @var TransformerLocator

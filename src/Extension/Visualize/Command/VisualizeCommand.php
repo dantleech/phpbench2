@@ -17,8 +17,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class VisualizeCommand extends Command
 {
-    const ARG_VISUALIZER = 'visualizer';
-    const ARG_PARAMETERS = 'parameters';
+    private const ARG_VISUALIZER = 'visualizer';
+    private const ARG_PARAMETERS = 'parameters';
 
     /**
      * @var VisualizerLocator

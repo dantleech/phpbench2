@@ -17,10 +17,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SampleCommand extends Command
 {
-    const ARG_SAMPLER = 'sampler';
-    const ARG_PARAMETERS = 'parameters';
-    const OPT_LABEL = 'label';
-    const OPT_SAMPLES = 'samples';
+    private const ARG_SAMPLER = 'sampler';
+    private const ARG_PARAMETERS = 'parameters';
+    private const OPT_CHANNEL = 'channel';
+    private const OPT_SAMPLES = 'samples';
 
     /**
      * @var SamplerLocator
@@ -37,13 +37,14 @@ class SampleCommand extends Command
     {
         $this->addArgument(self::ARG_SAMPLER, InputArgument::REQUIRED, 'Sampler alias');
         $this->addArgument(self::ARG_PARAMETERS, InputArgument::IS_ARRAY, 'Sampler parameters');
-        $this->addOption(self::OPT_LABEL, 'l', InputOption::VALUE_REQUIRED, 'Label for samples');
+        $this->addOption(self::OPT_CHANNEL, 'l', InputOption::VALUE_REQUIRED, 'Label for samples');
         $this->addOption(self::OPT_SAMPLES, 's', InputOption::VALUE_REQUIRED, 'Number of samples to take', 1);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $label = Cast::toStringOrNull($input->getOption(self::OPT_LABEL));
+        $output->writeln(getmypid());
+        $label = Cast::toStringOrNull($input->getOption(self::OPT_CHANNEL));
         $label = $label ?: uniqid();
         $alias = Cast::toString($input->getArgument(self::ARG_SAMPLER));
         $sampler = $this->locator->get($alias);
