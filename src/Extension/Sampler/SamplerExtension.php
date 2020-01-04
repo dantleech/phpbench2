@@ -57,7 +57,7 @@ class SamplerExtension implements Extension
             ],
         ]);
 
-        $container->register(CallbackSampler::class, function (Container $container) {
+        $container->register(ConstantSampler::class, function (Container $container) {
             return new ConstantSampler();
         }, [
             self::TAG_SAMPLER => [

@@ -56,6 +56,7 @@ class SampleCommand extends Command
         $stdin = fopen('php://stdin', 'r');
         $stdout = fopen('php://stdout', 'r');
         $write = $except = [];
+        $readingFromStdin = false;
 
         $samples = (int)$input->getOption(self::OPT_SAMPLES);
         if (0 >= $samples) {
@@ -68,6 +69,7 @@ class SampleCommand extends Command
             if (stream_select($read, $write, $except, 0)) {
                 $line = fgets($stdin);
                 fwrite($stdout, $line);
+                $readingFromStdin = true;
             }
 
             $results = Invoke::method($sampler, '__invoke', array_filter($options));
@@ -77,11 +79,8 @@ class SampleCommand extends Command
         }
 
         // pass-through any remaining data from prior processes
-        $read = [$stdin];
-        if (stream_select($read, $write, $except, 1)) {
-            while ($line = fgets($stdin)) {
-                fwrite($stdout, $line);
-            }
+        while (false !== $line = fgets($stdin)) {
+            fwrite($stdout, $line);
         }
 
         fclose($stdin);

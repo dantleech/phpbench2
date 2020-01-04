@@ -16,7 +16,7 @@ class CallbackSampler implements Sampler
      */
     public function __invoke(
         $callback,
-        int $iterations,
+        int $iterations = 1,
         array $param = []
     ): Results
     {
