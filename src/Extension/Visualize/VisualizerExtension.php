@@ -8,6 +8,7 @@ use PhpBench\Extension\Sampler\Command\SampleCommand;
 use PhpBench\Extension\Visualize\Command\VisualizeCommand;
 use PhpBench\Library\Sampler\SamplerLocator;
 use PhpBench\Library\Visualize\VisualizerLocator;
+use PhpBench\Library\Visualize\Visualizer\TestVisualizer;
 use Phpactor\Container\Container;
 use Phpactor\Container\ContainerBuilder;
 use Phpactor\Container\Extension;
@@ -58,6 +59,14 @@ class VisualizerExtension implements Extension
         }, [
             self::TAG_VISUALIZER => [
                 'alias' => 'bar',
+            ],
+        ]);
+
+        $container->register(TestVisualizer::class, function (Container $contianer) {
+            return new TestVisualizer();
+        }, [
+            self::TAG_VISUALIZER => [
+                'alias' => 'test',
             ],
         ]);
     }

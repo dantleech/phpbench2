@@ -7,9 +7,10 @@ use Symfony\Component\Process\Process;
 
 class IntegrationTestCase extends TestCase
 {
-    public static function exec(string $command): Process
+    public static function exec(string $command, ?string $stdin = null): Process
     {
         $process = Process::fromShellCommandline(__DIR__ . '/../bin/phpbench ' . $command);
+        $process->setInput($stdin);
         $process->run();
         return $process;
     }

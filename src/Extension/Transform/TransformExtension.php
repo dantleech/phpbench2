@@ -8,6 +8,7 @@ use PhpBench\Bridge\Php\Transform\AggregateValueTransformer;
 use PhpBench\Extension\Transform\Command\TransformCommand;
 use PhpBench\Library\Transform\TransformLocator;
 use PhpBench\Library\Transform\TransformerLocator;
+use PhpBench\Library\Transform\Transformer\TestTransformer;
 use Phpactor\Container\Container;
 use Phpactor\Container\ContainerBuilder;
 use Phpactor\Container\Extension;
@@ -74,6 +75,14 @@ class TransformExtension implements Extension
         }, [
             self::TAG_TRANSFORMER => [
                 'alias' => 'aggregate_value',
+            ],
+        ]);
+
+        $container->register(TestTransformer::class, function (Container $container) {
+            return new TestTransformer();
+        }, [
+            self::TAG_TRANSFORMER => [
+                'alias' => 'test',
             ],
         ]);
     }

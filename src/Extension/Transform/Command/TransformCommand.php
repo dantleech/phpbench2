@@ -51,10 +51,6 @@ class TransformCommand extends Command
         while ($data = fgets(STDIN)) {
             $values[] = json_decode($data, true);
 
-            if (count($values) < 2) {
-                continue;
-            }
-
             $result = Invoke::method($transformer, '__invoke', array_merge([
                 'data' => $values,
             ], array_filter($options)));
