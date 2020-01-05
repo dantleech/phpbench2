@@ -2,7 +2,6 @@
 
 namespace PhpBench\Bridge\Php\Visualizer;
 
-use PhpBench\Library\DataStructure\NamedNumerics;
 use PhpBench\Library\DataStructure\NumericMap;
 use PhpBench\Library\Visualize\Renderer;
 
