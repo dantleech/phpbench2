@@ -2,21 +2,16 @@
 
 namespace PhpBench\Extension\Visualize\Command;
 
-use DTL\Invoke\Invoke;
-use PhpBench\Bridge\Console\MethodToConsoleOptionsBroker;
 use PhpBench\Bridge\Console\CliParametersToInvokableParameters;
 use PhpBench\Library\Cast\Cast;
 use PhpBench\Library\Input\InputConfig;
 use PhpBench\Library\Output\OutputConfig;
-use PhpBench\Library\Visualize\Renderer;
 use PhpBench\Library\Visualize\RendererConfig;
 use PhpBench\Library\Visualize\RendererLocator;
 use PhpBench\Library\Visualize\Visualizer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class VisualizeCommand extends Command
@@ -59,10 +54,10 @@ class VisualizeCommand extends Command
         );
 
         $inputConfig = new InputConfig('stream', [
-            'stream' => 'php://stdin',
+            'uri' => 'php://stdin',
         ]);
         $outputConfig = new OutputConfig('stream', [
-            'stream' => 'php://stdout',
+            'uri' => 'php://stdout',
         ]);
         $rendererConfig = new RendererConfig($alias, $rendererOptions);
 

@@ -3,9 +3,6 @@
 namespace PhpBench\Bridge\Extension;
 
 use PhpBench\Bridge\Extension\Exception\AliasedServiceNotFound;
-use PhpBench\Library\Transform\Transformer;
-use PhpBench\Library\Transform\TransformerLocator;
-use PhpBench\Library\Transform\Exception\TransformerNotFound;
 use Psr\Container\ContainerInterface;
 
 abstract class AliasedServiceLocator

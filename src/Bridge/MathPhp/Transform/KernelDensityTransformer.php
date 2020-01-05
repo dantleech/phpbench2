@@ -16,8 +16,7 @@ final class KernelDensityTransformer implements Transformer
         int $points = 10,
         float $bandwidth = 0.1,
         string $function = KernelDensityEstimation::NORMAL
-    ): array
-    {
+    ): array {
         $values = [];
         $estimate = new KernelDensityEstimation($data, $bandwidth, $function);
         $step = (max($data) - min($data)) / $points;

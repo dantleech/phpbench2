@@ -18,11 +18,11 @@ class AggregateValueTransformer implements Transformer
         foreach ($data as $key => $row) {
             $groupKeys = [];
             foreach ($groupBy as $groupKey) {
-
                 if (!isset($row[$groupKey])) {
                     throw new RuntimeException(sprintf(
                         'Grouping key "%s" does not exist in data with keys "%s"',
-                        $groupKey, implode('", "', array_keys($data))
+                        $groupKey,
+                        implode('", "', array_keys($data))
                     ));
                 }
                 // TODO: check value is scalar or normalize
@@ -48,7 +48,8 @@ class AggregateValueTransformer implements Transformer
                     if (!isset($data[$key])) {
                         throw new RuntimeException(sprintf(
                             'Key "%s" does not exist in array with keys "%s"',
-                            $key, implode('", "', array_keys($data))
+                            $key,
+                            implode('", "', array_keys($data))
                         ));
                     }
                     $data = $data[$key];

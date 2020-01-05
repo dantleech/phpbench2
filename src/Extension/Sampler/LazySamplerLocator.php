@@ -37,7 +37,8 @@ class LazySamplerLocator implements SamplerLocator
         if (!isset($this->definitions[$alias])) {
             throw new SamplerNotFound(sprintf(
                 'Sampler with alias "%s" not found, known sampler alises: "%s"',
-                $alias, implode('", "', array_keys($this->definitions))
+                $alias,
+                implode('", "', array_keys($this->definitions))
             ));
         }
 

@@ -5,7 +5,7 @@ namespace PhpBench\Library\Visualize;
 use DTL\Invoke\Invoke;
 use PhpBench\Library\Input\InputConfig;
 use PhpBench\Library\Input\InputLocator;
-use PhpBench\Library\Input\Stream;
+use PhpBench\Library\Stream\Stream;
 use PhpBench\Library\Output\OutputConfig;
 use PhpBench\Library\Output\OutputLocator;
 
@@ -30,8 +30,7 @@ class Visualizer
         RendererLocator $rendererLocator,
         InputLocator $inputLocator,
         OutputLocator $writerLocator
-    )
-    {
+    ) {
         $this->rendererLocator = $rendererLocator;
         $this->writerLocator = $writerLocator;
         $this->inputLocator = $inputLocator;
@@ -41,25 +40,25 @@ class Visualizer
         InputConfig $inputConfig,
         OutputConfig $writerConfig,
         RendererConfig $rendererConfig
-    ): string
-    {
+    ): void {
         $input = $this->inputLocator->get($inputConfig->alias());
         $writer = $this->writerLocator->get($writerConfig->alias());
         $renderer = $this->rendererLocator->get($rendererConfig->name());
 
-        $stream = Invoke::method($input, 'open', $inputConfig->params());
-        assert($stream instanceof Stream);
+        $in = Invoke::method($input, '__invoke', $inputConfig->params());
+        $out = Invoke::method($writer, '__invoke', $writerConfig->params());
+        assert($in instanceof Stream);
+        assert($out instanceof Stream);
 
-        while ($data = $stream->readLine()) {
-            $rendered = Invoke::method($renderer, array_merge([
-                'data' => $data,
-            ], $rendererConfig->params()));
+        while ($data = $in->readData()) {
+            $rendered = Invoke::method($renderer, '__invoke', array_merge($rendererConfig->params(), [
+                'values' => $data,
+            ]));
 
-            Invoke::method($writer, array_merge([
-                'data' => $rendered,
-            ], $writerConfig->params()));
+            $out->write($rendered);
         }
 
-        $stream->close();
+        $out->close();
+        $in->close();
     }
 }

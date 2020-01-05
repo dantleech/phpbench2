@@ -2,14 +2,10 @@
 
 namespace PhpBench\Extension\Visualize;
 
-use PhpBench\Library\Sampler\Exception\SamplerNotFound;
-use PhpBench\Library\Sampler\Sampler;
-use PhpBench\Library\Sampler\SamplerLocator;
 use PhpBench\Library\Visualize\Exception\RendererNotFound;
 use PhpBench\Library\Visualize\Renderer;
 use PhpBench\Library\Visualize\RendererLocator;
 use Psr\Container\ContainerInterface;
-use PhpBench\Extension\Visualize\VisualizerDefinition;
 
 class LazyVisualizerLocator implements RendererLocator
 {
@@ -41,7 +37,8 @@ class LazyVisualizerLocator implements RendererLocator
         if (!isset($this->definitions[$alias])) {
             throw new RendererNotFound(sprintf(
                 'Visualizer with alias "%s" not found, known visualizer alises: "%s"',
-                $alias, implode('", "', array_keys($this->definitions))
+                $alias,
+                implode('", "', array_keys($this->definitions))
             ));
         }
 

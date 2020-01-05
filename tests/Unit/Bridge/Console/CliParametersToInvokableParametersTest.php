@@ -11,10 +11,10 @@ class CliParametersToInvokableParametersTest extends TestCase
      * @dataProvider provideConvertsRawParameters
      */
     public function testConvertsRawParameters(array $cliParams, array $exected)
-
     {
         $invokable = new class {
-            public function __invoke(string $foo, array $bar) {
+            public function __invoke(string $foo, array $bar)
+            {
             }
         };
 
@@ -48,5 +48,4 @@ class CliParametersToInvokableParametersTest extends TestCase
             ]
         ];
     }
-
 }

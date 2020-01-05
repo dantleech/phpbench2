@@ -7,7 +7,6 @@ use PhpBench\Bridge\MathPhp\Transform\DescribeTransformer;
 use PhpBench\Bridge\MathPhp\Transform\KernelDensityTransformer;
 use PhpBench\Bridge\Php\Transform\AggregateValueTransformer;
 use PhpBench\Extension\Transform\Command\TransformCommand;
-use PhpBench\Library\Transform\TransformLocator;
 use PhpBench\Library\Transform\TransformerLocator;
 use PhpBench\Library\Transform\Transformer\TestTransformer;
 use Phpactor\Container\Container;
@@ -15,8 +14,6 @@ use Phpactor\Container\ContainerBuilder;
 use Phpactor\Container\Extension;
 use Phpactor\Extension\Console\ConsoleExtension;
 use Phpactor\MapResolver\Resolver;
-use PhpBench\Bridge\Extension\AliasedServiceLocator;
-use PhpBench\Extension\Transform\TransformerDefinition;
 
 class TransformExtension implements Extension
 {

@@ -2,13 +2,10 @@
 
 namespace PhpBench\Extension\Visualize;
 
-use PhpBench\Bridge\Php\Sampler\CallbackSampler;
 use PhpBench\Bridge\Php\Visualizer\AnsiBarChartRenderer;
-use PhpBench\Extension\Sampler\Command\SampleCommand;
 use PhpBench\Extension\Visualize\Command\VisualizeCommand;
 use PhpBench\Library\Input\InputLocator;
 use PhpBench\Library\Output\OutputLocator;
-use PhpBench\Library\Sampler\SamplerLocator;
 use PhpBench\Library\Visualize\RendererLocator;
 use PhpBench\Library\Visualize\Renderer\TestRenderer;
 use PhpBench\Library\Visualize\Visualizer;
@@ -17,8 +14,6 @@ use Phpactor\Container\ContainerBuilder;
 use Phpactor\Container\Extension;
 use Phpactor\Extension\Console\ConsoleExtension;
 use Phpactor\MapResolver\Resolver;
-use PhpBench\Extension\Visualize\LazyVisualizerLocator;
-use PhpBench\Extension\Visualize\VisualizerDefinition;
 
 class VisualizerExtension implements Extension
 {

@@ -17,7 +17,8 @@ class LazyTransformerLocator extends AliasedServiceLocator implements Transforme
         } catch (AliasedServiceNotFound $notFound) {
             throw new TransformerNotFound(sprintf(
                 'Transformer "%s" not found, known transformers "%s"',
-                $notFound->alias(), implode('", "', $notFound->knownAliases())
+                $notFound->alias(),
+                implode('", "', $notFound->knownAliases())
             ), 0, $notFound);
         }
     }

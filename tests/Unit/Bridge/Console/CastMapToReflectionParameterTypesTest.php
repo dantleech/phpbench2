@@ -28,7 +28,6 @@ class CastMapToReflectionParameterTypesTest extends TestCase
             'array' => [ '1234 '],
             'bool' => false,
         ], (new CastMapToReflectionParameterTypes())->__invoke($reflectionMethod, $options));
-
     }
 }
 
@@ -38,4 +37,3 @@ class TestClass
     {
     }
 }
-

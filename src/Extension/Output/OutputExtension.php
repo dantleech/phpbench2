@@ -3,13 +3,12 @@
 namespace PhpBench\Extension\Output;
 
 use PhpBench\Bridge\Extension\AliasedService;
-use PhpBench\Library\Input\InputLocator;
+use PhpBench\Bridge\Php\Stream\StreamInputOuput;
 use PhpBench\Library\Output\OutputLocator;
 use Phpactor\Container\Container;
 use Phpactor\Container\ContainerBuilder;
 use Phpactor\Container\Extension;
 use Phpactor\MapResolver\Resolver;
-use PhpBench\Extension\Output\LazyOutputLocator;
 
 class OutputExtension implements Extension
 {
@@ -29,8 +28,15 @@ class OutputExtension implements Extension
             }
 
             return new LazyOutputLocator($container, ...$defintions);
-
         });
+
+        $container->register(StreamInputOuput::class, function (Container $container) {
+            return new StreamInputOuput();
+        }, [
+            self::TAG_OUTPUT => [
+                'alias' => 'stream',
+            ],
+        ]);
     }
     /**
      * {@inheritDoc}

@@ -3,7 +3,6 @@
 namespace PhpBench\Bridge\Php\Visualizer;
 
 use PhpBench\Library\Visualize\Renderer;
-use IntlChar;
 
 class AnsiBarChartRenderer implements Renderer
 {
@@ -82,7 +81,7 @@ class AnsiBarChartRenderer implements Renderer
 
         // draw solid segments excepting the last one
         if ($barWidth > 1) {
-            $bar .= str_repeat($char,  $barWidth - 1);
+            $bar .= str_repeat($char, $barWidth - 1);
         }
 
         // determine final segments char

@@ -3,6 +3,7 @@
 namespace PhpBench\Extension\Input;
 
 use PhpBench\Bridge\Extension\AliasedService;
+use PhpBench\Bridge\Php\Stream\StreamInputOuput;
 use PhpBench\Library\Input\InputLocator;
 use Phpactor\Container\Container;
 use Phpactor\Container\ContainerBuilder;
@@ -27,8 +28,15 @@ class InputExtension implements Extension
             }
 
             return new LazyInputLocator($container, ...$defintions);
-
         });
+
+        $container->register(StreamInputOuput::class, function (Container $container) {
+            return new StreamInputOuput();
+        }, [
+            self::TAG_INPUT => [
+                'alias' => 'stream',
+            ],
+        ]);
     }
     /**
      * {@inheritDoc}

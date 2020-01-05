@@ -4,15 +4,11 @@ namespace PhpBench\Extension\Transform\Command;
 
 use DTL\Invoke\Invoke;
 use PhpBench\Bridge\Console\CliParametersToInvokableParameters;
-use PhpBench\Bridge\Console\MethodToConsoleOptionsBroker;
 use PhpBench\Library\Cast\Cast;
-use PhpBench\Library\Transform\Transformer;
 use PhpBench\Library\Transform\TransformerLocator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class TransformCommand extends Command

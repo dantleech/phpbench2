@@ -3,7 +3,6 @@
 namespace PhpBench\Bridge\MathPhp\Transform;
 
 use MathPHP\Statistics\Descriptive;
-use MathPHP\Statistics\KernelDensityEstimation;
 use PhpBench\Library\Transform\Transformer;
 
 final class DescribeTransformer implements Transformer
@@ -14,8 +13,7 @@ final class DescribeTransformer implements Transformer
      */
     public function __invoke(
         array $data
-    ): array
-    {
+    ): array {
         return Descriptive::fiveNumberSummary($data);
     }
 }

@@ -7,7 +7,6 @@ use PhpBench\Bridge\Extension\Exception\AliasedServiceNotFound;
 use PhpBench\Library\Input\Exception\InputNotFound;
 use PhpBench\Library\Input\Input;
 use PhpBench\Library\Input\InputLocator;
-use PhpBench\Library\Output\Output;
 
 class LazyInputLocator extends AliasedServiceLocator implements InputLocator
 {
@@ -18,7 +17,8 @@ class LazyInputLocator extends AliasedServiceLocator implements InputLocator
         } catch (AliasedServiceNotFound $notFound) {
             throw new InputNotFound(sprintf(
                 'Input with alias "%s" not found, known inputs "%s"',
-                $notFound->alias(), implode('", "', $notFound->knownAliases())
+                $notFound->alias(),
+                implode('", "', $notFound->knownAliases())
             ), 0, $notFound);
         }
     }

@@ -11,7 +11,7 @@ use RuntimeException;
 final class CastMapToReflectionParameterTypes
 {
     /**
-     * @param array<mixed> $options 
+     * @param array<mixed> $options
      * @return array<mixed>
      *
      */
