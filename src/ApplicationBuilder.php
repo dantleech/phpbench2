@@ -2,6 +2,7 @@
 
 namespace PhpBench;
 
+use PhpBench\Extension\DataStructure\DataStructureExtension;
 use PhpBench\Extension\Input\InputExtension;
 use PhpBench\Extension\Output\OutputExtension;
 use PhpBench\Extension\Sampler\SamplerExtension;
@@ -23,6 +24,7 @@ class ApplicationBuilder
             VisualizerExtension::class,
             InputExtension::class,
             OutputExtension::class,
+            DataStructureExtension::class,
         ]);
         $application->setCommandLoader(
             $container->get(ConsoleExtension::SERVICE_COMMAND_LOADER)

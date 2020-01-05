@@ -4,6 +4,7 @@ namespace PhpBench\Extension\Visualize;
 
 use PhpBench\Bridge\Php\Visualizer\AnsiBarChartRenderer;
 use PhpBench\Extension\Visualize\Command\VisualizeCommand;
+use PhpBench\Library\DataStructure\DataFactory;
 use PhpBench\Library\Input\InputLocator;
 use PhpBench\Library\Output\OutputLocator;
 use PhpBench\Library\Visualize\RendererLocator;
@@ -46,7 +47,8 @@ class VisualizerExtension implements Extension
             return new Visualizer(
                 $container->get(RendererLocator::class),
                 $container->get(InputLocator::class),
-                $container->get(OutputLocator::class)
+                $container->get(OutputLocator::class),
+                $container->get(DataFactory::class)
             );
         });
 

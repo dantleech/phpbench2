@@ -3,15 +3,16 @@
 namespace PhpBench\Bridge\Php\Visualizer;
 
 use PhpBench\Library\DataStructure\NamedNumerics;
+use PhpBench\Library\DataStructure\NumericMap;
 use PhpBench\Library\Visualize\Renderer;
 
 class AnsiBarChartRenderer implements Renderer
 {
     const PADDING = 1;
 
-    public function __invoke(NamedNumerics $values, int $width = 50): string
+    public function __invoke(NumericMap $data, int $width = 50): string
     {
-        return $this->graph($values->toArray(), $width);
+        return $this->graph($data->toArray(), $width);
     }
 
     /**
