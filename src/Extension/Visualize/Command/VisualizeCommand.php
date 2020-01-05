@@ -6,8 +6,12 @@ use DTL\Invoke\Invoke;
 use PhpBench\Bridge\Console\MethodToConsoleOptionsBroker;
 use PhpBench\Bridge\Console\CliParametersToInvokableParameters;
 use PhpBench\Library\Cast\Cast;
+use PhpBench\Library\Input\InputConfig;
+use PhpBench\Library\Output\OutputConfig;
+use PhpBench\Library\Visualize\Renderer;
+use PhpBench\Library\Visualize\RendererConfig;
+use PhpBench\Library\Visualize\RendererLocator;
 use PhpBench\Library\Visualize\Visualizer;
-use PhpBench\Library\Visualize\VisualizerLocator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,14 +25,20 @@ class VisualizeCommand extends Command
     private const ARG_PARAMETERS = 'parameters';
 
     /**
-     * @var VisualizerLocator
+     * @var RendererLocator
      */
     private $locator;
 
-    public function __construct(VisualizerLocator $locator)
+    /**
+     * @var Visualizer
+     */
+    private $visualizer;
+
+    public function __construct(RendererLocator $locator, Visualizer $visualizer)
     {
         parent::__construct();
         $this->locator = $locator;
+        $this->visualizer = $visualizer;
     }
 
     protected function configure(): void
@@ -41,28 +51,26 @@ class VisualizeCommand extends Command
     {
         $alias = Cast::toString($input->getArgument(self::ARG_VISUALIZER));
 
-        $visualizer = $this->locator->get($alias);
-        $options = CliParametersToInvokableParameters::convert(
-            $visualizer,
+        $renderer = $this->locator->get($alias);
+
+        $rendererOptions = CliParametersToInvokableParameters::convert(
+            $renderer,
             Cast::toArray($input->getArgument(self::ARG_PARAMETERS))
         );
 
-        $values = [];
-        $numberOfLinesToClear = -1;
-        $stream = fopen('php://stdout', 'w');
-        while ($data = fgets(STDIN)) {
-            $values = (array)json_decode($data, true);
+        $inputConfig = new InputConfig('stream', [
+            'stream' => 'php://stdin',
+        ]);
+        $outputConfig = new OutputConfig('stream', [
+            'stream' => 'php://stdout',
+        ]);
+        $rendererConfig = new RendererConfig($alias, $rendererOptions);
 
-            fwrite($stream, sprintf("\x1B[%dA", $numberOfLinesToClear));
-            fwrite($stream, "\x1B[0J");
-
-            $result = Invoke::method($visualizer, '__invoke', array_merge([
-                'values' => $values,
-            ], array_filter($options)));
-
-            fwrite(STDOUT, $result);
-            $numberOfLinesToClear = substr_count($result, "\n");
-        }
+        $this->visualizer->visualize(
+            $inputConfig,
+            $outputConfig,
+            $rendererConfig
+        );
 
         return 0;
     }

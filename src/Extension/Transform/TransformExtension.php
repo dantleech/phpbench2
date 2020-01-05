@@ -2,6 +2,7 @@
 
 namespace PhpBench\Extension\Transform;
 
+use PhpBench\Bridge\Extension\AliasedService;
 use PhpBench\Bridge\MathPhp\Transform\DescribeTransformer;
 use PhpBench\Bridge\MathPhp\Transform\KernelDensityTransformer;
 use PhpBench\Bridge\Php\Transform\AggregateValueTransformer;
@@ -14,7 +15,7 @@ use Phpactor\Container\ContainerBuilder;
 use Phpactor\Container\Extension;
 use Phpactor\Extension\Console\ConsoleExtension;
 use Phpactor\MapResolver\Resolver;
-use PhpBench\Extension\Transform\LazyTransformLocator;
+use PhpBench\Bridge\Extension\AliasedServiceLocator;
 use PhpBench\Extension\Transform\TransformerDefinition;
 
 class TransformExtension implements Extension
@@ -46,12 +47,12 @@ class TransformExtension implements Extension
         $container->register(TransformerLocator::class, function (Container $container) {
             $defintions = [];
             foreach ($container->getServiceIdsForTag(self::TAG_TRANSFORMER) as $serviceId => $params) {
-                $defintions[] = TransformerDefinition::fromArray(array_merge([
+                $defintions[] = AliasedService::fromArray(array_merge([
                     'serviceId' => $serviceId,
                 ], $params));
             }
 
-            return new LazyTransformLocator($container, ...$defintions);
+            return new LazyTransformerLocator($container, ...$defintions);
         });
 
         $container->register(KernelDensityTransformer::class, function (Container $container) {

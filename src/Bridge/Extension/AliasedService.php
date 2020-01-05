@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpBench\Extension\Transform;
+namespace PhpBench\Bridge\Extension;
 
 use DTL\Invoke\Invoke;
 
-final class TransformerDefinition
+final class AliasedService
 {
     /**
      * @var string

@@ -8,19 +8,19 @@ class SampleCommandTest extends IntegrationTestCase
 {
     public function testTakeSingleSample()
     {
-        $process = self::exec('sample constant --label=one -- --value=100');
+        $process = self::exec('sample constant --channel=one -- --value=100');
         self::assertProcessSuccess($process);
         $output = $process->getOutput();
         $decoded = json_decode($output, true, 512, JSON_THROW_ON_ERROR);
         self::assertEquals([
-            'label' => 'one',
+            'channel' => 'one',
             'value' => 100
         ], $decoded);
     }
 
     public function testTakeManySamples()
     {
-        $process = self::exec('sample constant --samples=2 --label=one -- --value=100');
+        $process = self::exec('sample constant --samples=2 --channel=one -- --value=100');
         self::assertProcessSuccess($process);
         $output = $process->getOutput();
 
@@ -30,11 +30,11 @@ class SampleCommandTest extends IntegrationTestCase
 
         self::assertEquals([
             [
-                'label' => 'one',
+                'channel' => 'one',
                 'value' => 100
             ],
             [
-                'label' => 'one',
+                'channel' => 'one',
                 'value' => 100
             ],
         ], $samples);
@@ -42,7 +42,7 @@ class SampleCommandTest extends IntegrationTestCase
 
     public function testFailsOnUnknownSampler()
     {
-        $process = self::exec('sample notexisting --samples=2 --label=one -- --value=100');
+        $process = self::exec('sample notexisting --samples=2 --channel=one -- --value=100');
         self::assertProcessFailure($process, 'Sampler with alias "notexisting" not found');
     }
 }

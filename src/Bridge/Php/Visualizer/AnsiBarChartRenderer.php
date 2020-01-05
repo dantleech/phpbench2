@@ -2,10 +2,10 @@
 
 namespace PhpBench\Bridge\Php\Visualizer;
 
-use PhpBench\Library\Visualize\Visualizer;
+use PhpBench\Library\Visualize\Renderer;
 use IntlChar;
 
-class AnsiBarChartVisualizer implements Visualizer
+class AnsiBarChartRenderer implements Renderer
 {
     const PADDING = 1;
 

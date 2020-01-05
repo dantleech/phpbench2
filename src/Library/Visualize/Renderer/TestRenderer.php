@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpBench\Library\Visualize\Visualizer;
+namespace PhpBench\Library\Visualize\Renderer;
 
-use PhpBench\Library\Visualize\Visualizer;
+use PhpBench\Library\Visualize\Renderer;
 
-class TestVisualizer implements Visualizer
+class TestRenderer implements Renderer
 {
     public function __invoke(array $values, string $greeting): string
     {

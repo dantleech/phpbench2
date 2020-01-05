@@ -4,6 +4,6 @@ namespace PhpBench\Library\Visualize\Exception;
 
 use RuntimeException;
 
-class VisualizerNotFound extends RuntimeException
+class RendererNotFound extends RuntimeException
 {
 }

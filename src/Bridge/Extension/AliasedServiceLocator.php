@@ -1,13 +1,14 @@
 <?php
 
-namespace PhpBench\Extension\Transform;
+namespace PhpBench\Bridge\Extension;
 
+use PhpBench\Bridge\Extension\Exception\AliasedServiceNotFound;
 use PhpBench\Library\Transform\Transformer;
 use PhpBench\Library\Transform\TransformerLocator;
 use PhpBench\Library\Transform\Exception\TransformerNotFound;
 use Psr\Container\ContainerInterface;
 
-class LazyTransformLocator implements TransformerLocator
+abstract class AliasedServiceLocator
 {
     /**
      * @var ContainerInterface
@@ -19,26 +20,23 @@ class LazyTransformLocator implements TransformerLocator
      */
     private $definitions = [];
 
-    public function __construct(ContainerInterface $container, TransformerDefinition ...$definitions)
+    public function __construct(ContainerInterface $container, AliasedService ...$definitions)
     {
         $this->container = $container;
-        array_map(function (TransformerDefinition $definition) {
+        array_map(function (AliasedService $definition) {
             $this->definitions[$definition->alias()] = $definition;
         }, $definitions);
     }
 
-    public function get(string $alias): Transformer
+    public function getService(string $alias)
     {
         return $this->container->get($this->getDefinition($alias)->serviceId());
     }
 
-    private function getDefinition(string $alias): TransformerDefinition
+    private function getDefinition(string $alias): AliasedService
     {
         if (!isset($this->definitions[$alias])) {
-            throw new TransformerNotFound(sprintf(
-                'Transformer with alias "%s" not found, known transformer alises: "%s"',
-                $alias, implode('", "', array_keys($this->definitions))
-            ));
+            throw new AliasedServiceNotFound($alias, array_keys($this->definitions));
         }
 
         return $this->definitions[$alias];

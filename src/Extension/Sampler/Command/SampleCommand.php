@@ -43,7 +43,6 @@ class SampleCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln(getmypid());
         $label = Cast::toStringOrNull($input->getOption(self::OPT_CHANNEL));
         $label = $label ?: uniqid();
         $alias = Cast::toString($input->getArgument(self::ARG_SAMPLER));
@@ -75,7 +74,7 @@ class SampleCommand extends Command
 
             $results = Invoke::method($sampler, '__invoke', array_filter($options));
             fwrite($stdout, json_encode(array_merge([
-                'label' => $label,
+                'channel' => $label,
             ], $results->toArray()), JSON_THROW_ON_ERROR)."\n");
         }
 

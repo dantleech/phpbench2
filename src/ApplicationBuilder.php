@@ -2,6 +2,8 @@
 
 namespace PhpBench;
 
+use PhpBench\Extension\Input\InputExtension;
+use PhpBench\Extension\Output\OutputExtension;
 use PhpBench\Extension\Sampler\SamplerExtension;
 use PhpBench\Extension\Transform\TransformExtension;
 use PhpBench\Extension\Visualize\VisualizerExtension;
@@ -19,6 +21,8 @@ class ApplicationBuilder
             SamplerExtension::class,
             TransformExtension::class,
             VisualizerExtension::class,
+            InputExtension::class,
+            OutputExtension::class,
         ]);
         $application->setCommandLoader(
             $container->get(ConsoleExtension::SERVICE_COMMAND_LOADER)
