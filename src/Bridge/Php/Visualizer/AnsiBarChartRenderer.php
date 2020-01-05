@@ -2,18 +2,16 @@
 
 namespace PhpBench\Bridge\Php\Visualizer;
 
+use PhpBench\Library\DataStructure\NamedNumerics;
 use PhpBench\Library\Visualize\Renderer;
 
 class AnsiBarChartRenderer implements Renderer
 {
     const PADDING = 1;
 
-    /**
-     * @param array<float|int> $values
-     */
-    public function __invoke(array $values, int $width = 50): string
+    public function __invoke(NamedNumerics $values, int $width = 50): string
     {
-        return $this->graph($values, $width);
+        return $this->graph($values->toArray(), $width);
     }
 
     /**
