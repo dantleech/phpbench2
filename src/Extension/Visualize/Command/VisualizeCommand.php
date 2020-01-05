@@ -38,27 +38,31 @@ class VisualizeCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument(self::ARG_VISUALIZER, InputArgument::REQUIRED, 'Visualizer alias');
+        $this->addArgument(self::ARG_VISUALIZER, InputArgument::OPTIONAL, 'Visualizer alias');
         $this->addArgument(self::ARG_PARAMETERS, InputArgument::IS_ARRAY, 'Visualizer parameters');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $alias = Cast::toString($input->getArgument(self::ARG_VISUALIZER));
+        $alias = Cast::toStringOrNull($input->getArgument(self::ARG_VISUALIZER));
+        $rendererOptions = [];
 
-        $renderer = $this->locator->get($alias);
-
-        $rendererOptions = CliParametersToInvokableParameters::convert(
-            $renderer,
-            Cast::toArray($input->getArgument(self::ARG_PARAMETERS))
-        );
+        if ($alias) {
+            $renderer = $this->locator->get($alias);
+            $rendererOptions = CliParametersToInvokableParameters::convert(
+                $renderer,
+                Cast::toArray($input->getArgument(self::ARG_PARAMETERS))
+            );
+        }
 
         $inputConfig = new InputConfig('stream', [
             'uri' => 'php://stdin',
         ]);
+
         $outputConfig = new OutputConfig('stream', [
             'uri' => 'php://stdout',
         ]);
+
         $rendererConfig = new RendererConfig($alias, $rendererOptions);
 
         $this->visualizer->visualize(

@@ -5,7 +5,7 @@ namespace PhpBench\Library\Visualize;
 class RendererConfig
 {
     /**
-     * @var string
+     * @var ?string
      */
     private $name;
 
@@ -14,13 +14,13 @@ class RendererConfig
      */
     private $params;
 
-    public function __construct(string $name, array $params)
+    public function __construct(?string $name, array $params = null)
     {
         $this->name = $name;
         $this->params = $params;
     }
 
-    public function name(): string
+    public function alias(): ?string
     {
         return $this->name;
     }

@@ -23,7 +23,9 @@ class MapType extends Type
     public function accepts($data): bool
     {
         foreach ($data as $key => $value) {
-            if (!$this->key->accepts($key) || !$this->value->accepts($value)) {
+            if (
+                !$this->key->accepts($key) || !$this->value->accepts($value)
+            ) {
                 return false;
             }
         }

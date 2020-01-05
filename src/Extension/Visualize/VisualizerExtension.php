@@ -47,8 +47,7 @@ class VisualizerExtension implements Extension
             return new Visualizer(
                 $container->get(RendererLocator::class),
                 $container->get(InputLocator::class),
-                $container->get(OutputLocator::class),
-                $container->get(DataFactory::class)
+                $container->get(OutputLocator::class)
             );
         });
 

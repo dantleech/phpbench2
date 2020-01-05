@@ -20,6 +20,18 @@ class MapTypeTest extends AbstractTypeTestCase
             [1 => 'asd'],
             false
         ];
+
+        yield 'not accept mixed array' => [
+            TypeFactory::map(TypeFactory::string(), TypeFactory::number()),
+            [
+                'foobar' => 'one',
+                'barfoo' => [
+                    'hrtime' => 1234,
+                ],
+                'number' => 123.212
+            ],
+            false
+        ];
     }
 
     public function provideToString(): Generator

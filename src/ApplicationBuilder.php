@@ -24,7 +24,6 @@ class ApplicationBuilder
             VisualizerExtension::class,
             InputExtension::class,
             OutputExtension::class,
-            DataStructureExtension::class,
         ]);
         $application->setCommandLoader(
             $container->get(ConsoleExtension::SERVICE_COMMAND_LOADER)

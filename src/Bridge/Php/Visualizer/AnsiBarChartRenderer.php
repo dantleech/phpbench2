@@ -3,15 +3,25 @@
 namespace PhpBench\Bridge\Php\Visualizer;
 
 use PhpBench\Library\DataStructure\NumericMap;
+use PhpBench\Library\TypeSpec\Type;
+use PhpBench\Library\TypeSpec\TypeFactory;
 use PhpBench\Library\Visualize\Renderer;
 
 class AnsiBarChartRenderer implements Renderer
 {
     const PADDING = 1;
 
-    public function __invoke(NumericMap $data, int $width = 50): string
+    public function __invoke(array $data, int $width = 50): string
     {
-        return $this->graph($data->toArray(), $width);
+        return $this->graph($data, $width);
+    }
+
+    public function accepts(): Type
+    {
+        return TypeFactory::map(
+            TypeFactory::scalar(),
+            TypeFactory::number()
+        );
     }
 
     /**

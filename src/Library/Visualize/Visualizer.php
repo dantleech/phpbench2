@@ -27,21 +27,14 @@ class Visualizer
      */
     private $inputLocator;
 
-    /**
-     * @var DataFactory
-     */
-    private $dataFactory;
-
     public function __construct(
         RendererLocator $rendererLocator,
         InputLocator $inputLocator,
-        OutputLocator $writerLocator,
-        DataFactory $dataFactory
+        OutputLocator $writerLocator
     ) {
         $this->rendererLocator = $rendererLocator;
         $this->writerLocator = $writerLocator;
         $this->inputLocator = $inputLocator;
-        $this->dataFactory = $dataFactory;
     }
 
     public function visualize(
@@ -51,7 +44,6 @@ class Visualizer
     ): void {
         $input = $this->inputLocator->get($inputConfig->alias());
         $writer = $this->writerLocator->get($writerConfig->alias());
-        $renderer = $this->rendererLocator->get($rendererConfig->name());
 
         $in = Invoke::method($input, '__invoke', $inputConfig->params());
         $out = Invoke::method($writer, '__invoke', $writerConfig->params());
@@ -59,7 +51,7 @@ class Visualizer
         assert($out instanceof Stream);
 
         while ($data = $in->readData()) {
-            $data = $this->dataFactory->for($data);
+            $renderer = $this->rendererLocator->forData($data);
 
             $rendered = Invoke::method($renderer, '__invoke', array_merge($rendererConfig->params(), [
                 'data' => $data,
