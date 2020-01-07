@@ -2,6 +2,7 @@
 
 namespace PhpBench\Extension\Visualize;
 
+use PhpBench\Library\TypeSpec\TypeSpecDetector;
 use PhpBench\Library\Visualize\Exception\RendererNotFound;
 use PhpBench\Library\Visualize\Renderer;
 use PhpBench\Library\Visualize\RendererLocator;
@@ -46,7 +47,8 @@ class LazyVisualizerLocator implements RendererLocator
         }
 
         throw new RuntimeException(sprintf(
-            'Could not find renderer for given data structure. Can handle the following: %s%s',
+            'Could not find renderer for given data structure "%s". Can handle the following: %s%s',
+            TypeSpecDetector::represent($data),
             "\n  - ",
             implode("\n  - ", $acceptedTypes)
         ));

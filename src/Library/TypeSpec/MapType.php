@@ -22,6 +22,13 @@ class MapType extends Type
 
     public function accepts($data): bool
     {
+        if (!is_array($data)) {
+            return false;
+        }
+
+        if (range(0, count($data) - 1) === array_keys($data)) {
+            return false;
+        }
         foreach ($data as $key => $value) {
             if (
                 !$this->key->accepts($key) || !$this->value->accepts($value)

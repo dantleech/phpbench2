@@ -2,7 +2,7 @@
 
 namespace PhpBench\Library\TypeSpec;
 
-class UnknownType extends Type
+class MixedType extends Type
 {
     public function accepts($data): bool
     {
@@ -11,6 +11,6 @@ class UnknownType extends Type
 
     public function __toString(): string
     {
-        return 'unknown';
+        return 'mixed';
     }
 }

@@ -2,6 +2,7 @@
 
 namespace PhpBench\Library\TypeSpec;
 
+use Generator;
 use RuntimeException;
 
 class TypeSpecDetector
@@ -18,35 +19,46 @@ class TypeSpecDetector
             return self::resolveScalarType($data);
         }
 
+        if (null === $data) {
+            return new MixedType();
+        }
+
         foreach ($data as $key => $value) {
-            $type = new ListType(
-                self::resolveType($value)
-            );
-
-            if ($type->accepts($data)) {
-                return $type;
-            }
-
-            $type = new MapType(
-                self::resolveType($key),
-                self::resolveType($value)
-            );
-
-            if ($type->accepts($data)) {
+            foreach (self::arrayLikeTypes($key, $value) as $type) {
+                if (!$type->accepts($data)) {
+                    continue;
+                }
                 return $type;
             }
         }
 
-        return new Unknown();
+        return new MixedType();
     }
 
-    private static function scalarTypes(): array
+    private static function arrayLikeTypes($key, $value): Generator
     {
-        return [
-            new NumberType(),
-            new StringType(),
+        yield new ListType(
+            self::resolveType($value)
+        );
+
+        yield new ListType(
+            new MixedType(),
+        );
+
+        yield new MapType(
+            self::resolveType($key),
+            self::resolveType($value)
+        );
+
+        yield new MapType(
+            self::resolveType($key),
+            new MixedType(),
+        );
+
+        yield new MapType(
             new ScalarType(),
-        ];
+            new MixedType(),
+        );
     }
 
     private static function resolveScalarType($data)
@@ -60,5 +72,14 @@ class TypeSpecDetector
         throw new RuntimeException(sprintf(
             'Could not resolve a scalar type'
         ));
+    }
+
+    private static function scalarTypes(): array
+    {
+        return [
+            new NumberType(),
+            new StringType(),
+            new ScalarType(),
+        ];
     }
 }

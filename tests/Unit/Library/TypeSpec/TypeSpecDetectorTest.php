@@ -38,9 +38,37 @@ class TypeSpecDetectorTest extends TestCase
         ];
 
         yield 'map of lists' => [
-            ['one' => [1,2]],
+            [
+                'one' => [1,2]
+            ],
             'map<string,list<number>>',
         ];
 
+        yield 'mixed list 1' => [
+            [
+                1,
+                'string'
+            ],
+            'list<mixed>',
+        ];
+
+        yield 'mixed map 1' => [
+            [
+                'one' => [1,2],
+                'string' => 'string',
+            ],
+            'map<string,mixed>',
+        ];
+
+        yield 'mixed map 2' => [
+            [
+                'one' => [1,2],
+                'two' => [
+                    1,
+                    ['asd'],
+                ],
+            ],
+            'map<string,mixed>',
+        ];
     }
 }

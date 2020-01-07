@@ -15,6 +15,12 @@ class MapTypeTest extends AbstractTypeTestCase
             true
         ];
 
+        yield 'list' => [
+            TypeFactory::map(TypeFactory::number(), TypeFactory::number()),
+            [0 => 1, 1 => 2],
+            false
+        ];
+
         yield 'invalid string to string map' => [
             TypeFactory::map(TypeFactory::string(), TypeFactory::string()),
             [1 => 'asd'],
