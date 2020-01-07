@@ -13,7 +13,7 @@ class TestRenderer implements Renderer
     {
         return implode(" ", array_map(function (string $value) use ($greeting) {
             return $greeting . ' ' . $value;
-        }, $data->toArray()));
+        }, $data));
     }
 
     public function accepts(): Type
