@@ -59,8 +59,8 @@ class VisualizeCommand extends Command
             'uri' => 'php://stdin',
         ]);
 
-        $outputConfig = new OutputConfig('stream', [
-            'uri' => 'php://stdout',
+        $outputConfig = new OutputConfig('ansi', [
+            'clear' => true,
         ]);
 
         $rendererConfig = new RendererConfig($alias, $rendererOptions);

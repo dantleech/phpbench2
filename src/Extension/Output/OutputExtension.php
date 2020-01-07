@@ -3,6 +3,7 @@
 namespace PhpBench\Extension\Output;
 
 use PhpBench\Bridge\Extension\AliasedService;
+use PhpBench\Bridge\Php\Stream\AnsiOutput;
 use PhpBench\Bridge\Php\Stream\StreamInputOuput;
 use PhpBench\Library\Output\OutputLocator;
 use Phpactor\Container\Container;
@@ -30,11 +31,19 @@ class OutputExtension implements Extension
             return new LazyOutputLocator($container, ...$defintions);
         });
 
-        $container->register(StreamInputOuput::class, function (Container $container) {
+        $container->register('output.'.StreamInputOuput::class, function (Container $container) {
             return new StreamInputOuput();
         }, [
             self::TAG_OUTPUT => [
                 'alias' => 'stream',
+            ],
+        ]);
+
+        $container->register(AnsiOutput::class, function (Container $container) {
+            return new AnsiOutput($container->get('output.'.StreamInputOuput::class));
+        }, [
+            self::TAG_OUTPUT => [
+                'alias' => 'ansi',
             ],
         ]);
     }

@@ -47,6 +47,7 @@ class Visualizer
 
         $in = Invoke::method($input, '__invoke', $inputConfig->params());
         $out = Invoke::method($writer, '__invoke', $writerConfig->params());
+
         assert($in instanceof Stream);
         assert($out instanceof Stream);
 
